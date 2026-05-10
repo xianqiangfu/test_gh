@@ -54,3 +54,5 @@ build/
 # Environment variables
 .env
 .env.local
+.claude/issues
+.claude/settings.local.json
