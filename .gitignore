@@ -56,3 +56,4 @@ build/
 .env.local
 .claude/issues
 .claude/settings.local.json
+/workspace  # Claude Code workspace

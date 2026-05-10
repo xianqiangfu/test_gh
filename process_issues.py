@@ -21,6 +21,8 @@ class IssueProcessor:
     def __init__(self, repo_owner: str, repo_name: str, workspace_dir: str = "workspace"):
         self.repo_owner = repo_owner
         self.repo_name = repo_name
+        # 获取当前工作目录（项目根目录）
+        self.project_dir = Path.cwd()
         self.workspace_dir = Path(workspace_dir)
         self.workspace_dir.mkdir(exist_ok=True)
 
@@ -47,7 +49,12 @@ class IssueProcessor:
             "--state", "open",
             "--json", "number,title,body,labels"
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        result = subprocess.run(cmd, capture_output=True, check=True, encoding='utf-8')
+
+        if not result.stdout or not result.stdout.strip():
+            print("没有找到开放的 issue")
+            return []
+
         return json.loads(result.stdout)
 
     def generate_prompt(self, issue: Dict) -> str:
@@ -57,7 +64,9 @@ class IssueProcessor:
         body = issue.get("body", "")
         labels = [label["name"] for label in issue.get("labels", [])]
 
-        prompt = f"""请解决以下 GitHub issue #{issue_number}:
+        prompt = f"""工作目录: {self.project_dir}
+
+请解决以下 GitHub issue #{issue_number}:
 
 标题: {title}
 标签: {', '.join(labels) if labels else '无'}
@@ -83,7 +92,7 @@ class IssueProcessor:
 
     def send_to_claude_code(self, prompt: str) -> bool:
         """将 prompt 发送给 Claude Code 处理"""
-        # 使用 claude code CLI
+        # 使用 claude code CLI，在项目根目录下执行
         cmd = ["claude", "code", prompt]
 
         try:
@@ -91,7 +100,9 @@ class IssueProcessor:
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=300  # 5 分钟超时
+                timeout=300,  # 5 分钟超时
+                encoding='utf-8',
+                cwd=self.project_dir  # 设置工作目录
             )
             return result.returncode == 0
         except subprocess.TimeoutExpired:
@@ -109,7 +120,8 @@ class IssueProcessor:
                 ["git", "status", "--porcelain"],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
+                encoding='utf-8'
             )
 
             if not status_result.stdout.strip():
@@ -206,13 +218,13 @@ def main():
     parser = argparse.ArgumentParser(description="GitHub Issue 自动化处理")
     parser.add_argument("--owner", default="xianqiangfu", help="仓库所有者")
     parser.add_argument("--repo", default="test_gh", help="仓库名称")
-    parser.add_argument("--limit", type=int, help="限制处理的 issue 数量")
-    parser.add_argument("--no-claude", action="store_true", help="不调用 Claude Code（仅生成 prompt）")
+    parser.add_argument("--limit", type=int, default=100, help="限制处理的 issue 数量")
+    parser.add_argument("--use-claude", default=True, action="store_true", help="调用 Claude Code")
 
     args = parser.parse_args()
 
     processor = IssueProcessor(args.owner, args.repo)
-    processor.process_all(use_claude=not args.no_claude, limit=args.limit)
+    processor.process_all(use_claude=args.use_claude, limit=args.limit)
 
 
 if __name__ == "__main__":
