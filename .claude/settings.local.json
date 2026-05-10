@@ -7,7 +7,10 @@
       "Bash(git push *)",
       "Bash(gh label *)",
       "Bash(gh repo *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(cat)",
+      "Bash(chmod +x create_issues.sh)",
+      "Bash(bash create_issues.sh)"
     ]
   }
 }
