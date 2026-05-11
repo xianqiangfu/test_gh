@@ -1,0 +1,32 @@
+工作目录: E:\testclaude\test_gh
+
+请解决以下 GitHub issue #52:
+
+标题: 添加 多元方差分析（MANOVA） 学习笔记
+标签: 无
+
+描述:
+
+## 问题
+统计推断部分缺少多元方差分析（MANOVA）的学习笔记。MANOVA是处理多个因变量的重要方法。
+
+## 说明
+多元方差分析用于分析一个或多个分类变量对多个连续因变量的影响。
+
+## 建议内容
+- MANOVA的定义和用途
+- 与ANOVA的比较
+- Wilks' Lambda、Pillai's Trace等检验统计量
+- 前提条件
+- MANOVA的假设检验
+- 事后检验
+- Python实现示例
+
+---
+
+## 参考资源
+- 多元统计学教材
+- Python statsmodels MANOVA
+
+
+请根据 issue 的要求完成相应的任务。完成后，请提交代码并推送到远程仓库。

@@ -1,0 +1,33 @@
+工作目录: E:\testclaude\test_gh
+
+请解决以下 GitHub issue #54:
+
+标题: 添加 多重比较校正方法 学习笔记
+标签: 无
+
+描述:
+
+## 问题
+统计推断部分虽然p-value笔记中提到了多重比较，但缺少系统的多重比较校正方法学习笔记。
+
+## 说明
+多重比较会导致第一类错误率增加，需要使用校正方法控制错误率。
+
+## 建议内容
+- 多重比较问题
+- 家族错误率（FWER）与错误发现率（FDR）
+- Bonferroni校正
+- Holm-Bonferroni方法
+- False Discovery Rate (FDR)方法
+- 其他校正方法
+- 校正方法的选择
+- Python实现示例
+
+---
+
+## 参考资源
+- 多重比较文献
+- Python statsmodels.multitest模块
+
+
+请根据 issue 的要求完成相应的任务。完成后，请提交代码并推送到远程仓库。
